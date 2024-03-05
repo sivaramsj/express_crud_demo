@@ -3,11 +3,18 @@ const config=require('config');
 
 // custom modules
 const logger= require('./middleware/logger');
-const genre =require('./routes/genre')
+const genre =require('./routes/genre');
+const user=require('./routes/User');
+const auth=require('./routes/auth');
 
 const mongoose= require('mongoose');
 const express = require('express');
 const app =express();
+
+if(!config.get('jwtPrivateKey')){
+    console.error('FATAL ERROR:jwtPrivateKey is not defined');
+    process.exit(1);
+}
 
 
 mongoose.connect('mongodb://localhost/movie_list')
@@ -16,7 +23,9 @@ mongoose.connect('mongodb://localhost/movie_list')
 
 app.use(express.json());
 // app.use(logger);
-app.use('/api/genre',genre)
+app.use('/api/genre',genre);
+app.use('/api/user',user);
+app.use('/api/auth',auth)
 
 
 
